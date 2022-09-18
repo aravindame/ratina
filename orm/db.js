@@ -1,15 +1,4 @@
-import Mongoose from "mongoose";
-
 var Course = null;
-
-export default function connect(){
-    const host = 'mongodb://localhost/playground';
-    Mongoose.connect(host)
-        .then(()=>console.log('Connection success.....'))
-        .catch((error)=>console.log(error));
-    const schema = createSchema();
-    createModel(schema)
-}
 
 export function createSchema() {
     const schema = new Mongoose.Schema({
