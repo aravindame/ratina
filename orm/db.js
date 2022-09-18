@@ -13,12 +13,43 @@ export default function connect(){
 
 export function createSchema() {
     const schema = new Mongoose.Schema({
-        name: String,
+        name: {
+            type: String,
+            required: true,
+            minlength: 5,
+            maxlength: 255
+        },
+        category:{
+            type: String,
+            required: true,
+            enum: ['web', 'mobile', 'network'],
+            lowercase: true,
+            trim: true 
+        },        
         author: String,
-        tags: [String],
+        tags: {
+            type: Array,
+            validate: {
+                isAsync: true,
+                validator: function(value, callback){
+                    setTimeout(()=>{
+                        const result = value && value.length > 0;
+                        callback(result);
+                    }, 4000);
+                },
+                message: 'A course should have at least one tag.'
+            }
+        },
         date: { type: Date, default: Date.now },
         isPublished: Boolean,
-        price: Number
+        price: {
+            type: Number,
+            required: function () { return this.isPublished },
+            min: 20,
+            max: 200,
+            get: (value)=>Math.round(value),
+            set: (value)=>Math.round(value)
+        }
     });
     return schema;
 }
@@ -27,12 +58,17 @@ export async function createModel(schema) {
     Course = Mongoose.model('Course', schema);
     const course = new Course({
         name: 'Master Node.js',
+        category: 'web',
         author: 'Mosh',
-        tags: ['node', 'backend'],
+        tags: ['node'],
         isPublished: true,
-        price: 16
+        price: 50
     });
-    await course.save();
+    try {
+        await course.save();
+    } catch (error) {
+        console.log(error.message);
+    }
     getCourses();
 }
 
