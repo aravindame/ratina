@@ -1,50 +1,57 @@
-import express from 'express';
-import Customer from '../models/customer.js';
-import { validateCustomer } from '../validators/customer.js';
+import validate, { Customer } from '../models/customer.js'; 
+import mongoose from 'mongoose';
+import { Router } from 'express';
+const router = Router();
 
-const router = express.Router();
-
-router.get('/', async (req, res)=>{
-    const result = await Customer.find();
-    res.status(200).send(result);
+router.get('/', async (req, res) => {
+  const customers = await Customer.find().sort('name');
+  res.send(customers);
 });
 
-router.get('/:id', async (req, res)=>{
-    const result = await Customer.findById(req.params.id);
-    if(!result) return res.status(404).send('The genre with the given ID was not found.');
-    res.status(200).send(result);
+router.post('/', async (req, res) => {
+  const { error } = validate(req.body); 
+  if (error) return res.status(400).send(error.details[0].message);
+
+  let customer = new Customer({ 
+    name: req.body.name,
+    isGold: req.body.isGold,
+    phone: req.body.phone
+  });
+  customer = await customer.save();
+  
+  res.send(customer);
 });
 
-router.post('/', async (req, res)=>{
-    const newCustomer = req.body;
-    const { error } = validateCustomer(newCustomer);
-    if(error) res.status(400).send(error.details[0].message);
-    const customer = new Customer(newCustomer);
-    let result = null;
-    try {
-        result = await customer.save();
-    } catch (error) {
-        console.log(error.message);
-        res.status(500).send(error.message)
-    }
-    res.status(200).send(result);
+router.put('/:id', async (req, res) => {
+  const { error } = validate(req.body); 
+  if (error) return res.status(400).send(error.details[0].message);
+
+  const customer = await Customer.findByIdAndUpdate(req.params.id,
+    { 
+      name: req.body.name,
+      isGold: req.body.isGold,
+      phone: req.body.phone
+    }, { new: true });
+
+  if (!customer) return res.status(404).send('The customer with the given ID was not found.');
+  
+  res.send(customer);
 });
 
-router.put('/:id', async (req, res)=>{
-    const newCustomer = req.body;
-    const { error } = validateCustomer(newCustomer);
-    if(error) res.status(400).send(error.details[0].message);
-    const { name, phone, isGold } = newCustomer;
-    const result = await Customer.findByIdAndUpdate(req.params.id, { name, phone, isGold }, {new: true});
-    console.log(result);
-    if (!result) return res.status(404).send('The genre with the given ID was not found.');
-    res.send(result);
+router.delete('/:id', async (req, res) => {
+  const customer = await Customer.findByIdAndRemove(req.params.id);
+
+  if (!customer) return res.status(404).send('The customer with the given ID was not found.');
+
+  res.send(customer);
 });
 
-router.delete('/:id', async (req, res)=>{
-    const result = await Customer.findByIdAndRemove(req.params.id);
-    if (!result) return res.status(404).send('The genre with the given ID was not found.');
-    res.status(200).send(result);
+router.get('/:id', async (req, res) => {
+  const customer = await Customer.findById(req.params.id);
+
+  if (!customer) return res.status(404).send('The customer with the given ID was not found.');
+
+  res.send(customer);
 });
 
-export default router;
+export default router; 

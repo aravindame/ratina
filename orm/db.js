@@ -1,6 +1,8 @@
+import Mongoose from "mongoose";
+
 var Course = null;
 
-export function createSchema() {
+export function createSchemaCourse() {
     const schema = new Mongoose.Schema({
         name: {
             type: String,

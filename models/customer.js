@@ -1,14 +1,34 @@
-import Mongoose from "mongoose";
+import Joi from 'joi';
+import mongoose from 'mongoose';
 
-const schema = new Mongoose.Schema({
-    isGold : {
-        type: Boolean,
-        required: true
-    },
-    name: String,
-    phone: String
-});
+const Customer = mongoose.model('Customer', new mongoose.Schema({
+  name: {
+    type: String,
+    required: true,
+    minlength: 5,
+    maxlength: 50
+  },
+  isGold: {
+    type: Boolean,
+    default: false
+  },
+  phone: {
+    type: String,
+    required: true,
+    minlength: 5,
+    maxlength: 50
+  }
+}));
 
-const Customer = Mongoose.model('Customer', schema);
+export default function validateCustomer(customer) {
+  const schema = {
+    name: Joi.string().min(5).max(50).required(),
+    phone: Joi.string().min(5).max(50).required(),
+    isGold: Joi.boolean()
+  };
 
-export default Customer;
+  return validate(customer, schema);
+}
+
+const _Customer = Customer;
+export { _Customer as Customer }; 

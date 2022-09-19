@@ -1,47 +1,20 @@
-import express from 'express';
-import helmet from 'helmet';
-import morgan from 'morgan';
+import mongoose from 'mongoose';
 import genres from './routes/genres.js';
-import customer from './routes/customers.js';
-import Mongoose from "mongoose";
+import customers from './routes/customers.js';
+import movies from './routes/movies.js';
+import rentals from './routes/rentals.js';
+import express from 'express';
+const app = express();
 
-var app = null;
+mongoose.connect('mongodb://localhost/vidly')
+  .then(() => console.log('Connected to MongoDB...'))
+  .catch(err => console.error('Could not connect to MongoDB...'));
 
-const getExpressInstance = ()=>{
-    if(app) return app;
-    app = express();
-}
+app.use(express.json());
+app.use('/api/genres', genres);
+app.use('/api/customers', customers);
+app.use('/api/movies', movies);
+app.use('/api/rentals', rentals);
 
-const applyMiddlewares = ()=>{
-    app.use(express.json());
-    app.use(express.urlencoded({extended: true}));
-    app.use(express.static('public'));
-    app.use(helmet());
-    (app.get('env')==='development') && app.use(morgan('tiny'));
-}
-
-const connectDB = ()=> {
-    const host = 'mongodb://localhost/ratina';
-    Mongoose.connect(host)
-        .then(()=>console.log('Connection success.....'))
-        .catch((error)=>console.log(error));
-}
-
-const applyRoutes = ()=> {
-    app.use('/api/genres', genres);
-    app.use('/api/customer', customer);
-}
-
-const startApp = ()=> {    
-    const port = process.env.PORT || 3000;
-    app.listen(port, ()=>console.log(`listening on port ${port}`));
-}
-
-(()=>{
-    getExpressInstance();
-    applyMiddlewares()
-    connectDB();
-    applyRoutes();
-    startApp();
-})();
-
+const port = process.env.PORT || 3000;
+app.listen(port, () => console.log(`Listening on port ${port}...`));
