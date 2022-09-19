@@ -1,7 +1,6 @@
 import validate, { Rental } from '../models/rental.js';
 import { Movie } from '../models/movie.js';
 import { Customer } from '../models/customer.js';
-import mongoose from 'mongoose';
 import { Router } from 'express';
 import Fawn from 'fawn';
 const router = Router();

@@ -12,11 +12,13 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
+    "bcrypt": "^5.0.1",
     "config": "^1.29.2",
     "express": "^4.16.2",
     "fawn": "^2.1.5",
     "helmet": "^3.9.0",
     "joi": "^13.1.0",
+    "lodash": "^4.17.4",
     "mongoose": "^5.0.1",
     "morgan": "^1.9.0",
     "nodemon": "^2.0.19"
