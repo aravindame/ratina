@@ -1,0 +1,1 @@
+{"message":"Error logged","stack":"Error: Error logged\n    at file:///media/aravinda/Documents/Dojo/Node.js/ratina/routes/rentals.js:12:9\n    at async file:///media/aravinda/Documents/Dojo/Node.js/ratina/middleware/async-safe-execution-handler.js:4:12","level":"error","timestamp":"2022-09-20T06:24:46.688Z"}

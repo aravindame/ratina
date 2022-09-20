@@ -3,12 +3,14 @@ import { Movie } from '../models/movie.js';
 import { Customer } from '../models/customer.js';
 import { Router } from 'express';
 import Fawn from 'fawn';
+import { asyncSafeExecutionHandler } from '../middleware/async-safe-execution-handler.js';
+
 const router = Router();
 
-router.get('/', async (req, res) => {
+router.get('/', asyncSafeExecutionHandler(async (req, res) => {
   const rentals = await Rental.find().sort('-dateOut');
   res.send(rentals);
-});
+}));
 
 router.post('/', async (req, res) => {
   const { error } = validate(req.body);
@@ -46,10 +48,10 @@ router.post('/', async (req, res) => {
   res.send(rental);
 });
 
-router.get('/:id', async (req, res) => {
+router.get('/:id', asyncSafeExecutionHandler(async (req, res) => {
   const rental = await Rental.findById(req.params.id);
   if (!rental) return res.status(404).send('The rental with the given ID was not found.');
   res.send(rental);
-});
+}));
 
 export default router; 
