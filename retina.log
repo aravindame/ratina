@@ -1,1 +1,3 @@
 {"message":"Error logged","stack":"Error: Error logged\n    at file:///media/aravinda/Documents/Dojo/Node.js/ratina/routes/rentals.js:12:9\n    at async file:///media/aravinda/Documents/Dojo/Node.js/ratina/middleware/async-safe-execution-handler.js:4:12","level":"error","timestamp":"2022-09-20T06:24:46.688Z"}
+{"level":"info","message":"Listening on port 3000...","timestamp":"2022-09-20T08:25:33.572Z"}
+{"level":"info","message":"Connected to MongoDB...","timestamp":"2022-09-20T08:25:33.594Z"}

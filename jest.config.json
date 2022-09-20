@@ -1,0 +1,6 @@
+{
+  "verbose": true,
+  "testEnvironmentOptions": {
+    "url": "http://localhost/"
+  }
+}

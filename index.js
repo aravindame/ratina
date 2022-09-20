@@ -25,14 +25,14 @@ function initLogger() {
 }
 
 function initUncaughtExceptionHandler() {
-  process.on('uncaughtException', (ex) => winston.log(ex.message, ex));
-  process.on('unhandledRejection', (ex) => winston.log(ex.message, ex));
+  process.on('uncaughtException', (ex) => winston.info(ex.message, ex));
+  process.on('unhandledRejection', (ex) => winston.info(ex.message, ex));
 }
 
 function dbconnection() {
   mongoose.connect('mongodb://localhost/vidly')
-  .then(() => winston.log('Connected to MongoDB...'))
-    .catch(err => winston.log(err.message, err));
+  .then(() => winston.info('Connected to MongoDB...'))
+    .catch(err => winston.info(err.message, err));
 }
 
 function applyMiddlewares() {
@@ -48,5 +48,6 @@ function applyMiddlewares() {
 
 function startServer() {
   const port = process.env.PORT || 3000;
-  app.listen(port, () => winston.log(`Listening on port ${port}...`));
+  app.listen(port, () => winston.info(`Listening on port ${port}...`));
 }
+
