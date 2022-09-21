@@ -1,6 +1,4 @@
 {
-    "name" : "My express app : Production Mode",
-    "mail":{
-        "host": "prod-mail-server"
-    }
+    "jwtPrivateKey": "",
+    "db": "mongodb://localhost/ratina"
 }

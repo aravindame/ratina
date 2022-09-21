@@ -1,7 +1,7 @@
-export const asyncSafeExecutionHandler = (handler)=>{
-    return async (req, res, next)=>{
+export const asyncSafeExecutionHandler = (handler) => {
+    return async (req, res, next) => {
         try {
-           await handler(req, res);            
+            await handler(req, res);
         } catch (error) {
             next(error);
         }

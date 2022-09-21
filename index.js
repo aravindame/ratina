@@ -1,6 +1,7 @@
 import mongoose from 'mongoose';
 import express from 'express';
 import winston from 'winston';
+import config from 'config';
 import genres from './routes/genres.js';
 import customers from './routes/customers.js';
 import movies from './routes/movies.js';
@@ -10,6 +11,7 @@ import auth from './routes/auth.js';
 import { errorHandler } from './middleware/error-handler.js';
 
 const app = express();
+let server = null;
 
 (() => {
   initLogger();
@@ -30,8 +32,9 @@ function initUncaughtExceptionHandler() {
 }
 
 function dbconnection() {
-  mongoose.connect('mongodb://localhost/vidly')
-  .then(() => winston.info('Connected to MongoDB...'))
+  const url = config.get('db');
+  mongoose.connect(url)
+    .then(() => winston.info(`Connected to ${url}`))
     .catch(err => winston.info(err.message, err));
 }
 
@@ -48,6 +51,9 @@ function applyMiddlewares() {
 
 function startServer() {
   const port = process.env.PORT || 3000;
-  app.listen(port, () => winston.info(`Listening on port ${port}...`));
+  server = app.listen(port, () => winston.info(`Listening on port ${port}...`));
 }
 
+export default function getServer() {
+  return server;
+}
